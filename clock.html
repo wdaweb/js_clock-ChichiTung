@@ -6,24 +6,82 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,700&family=Roboto&display=swap"
+        rel="stylesheet">
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #fff;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-family: 'Lobster', cursive;
+        }
+
+        .wrapper {
+            animation: scroll 70s linear infinite;
+            background: url("https://images.unsplash.com/photo-1465146633011-14f8e0781093?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3450&q=80"), #111111;
+            color: #eee;
+            height: 100vh;
+            min-width: 360px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            perspective-origin: 50% 50%;
+
+        }
+
+        @keyframes scroll {
+            100% {
+                background-position: 0px -3000px;
+            }
+        }
+
+        @media (prefers-reduced-motion) {
+            .wrapper {
+                animation: scroll 200s linear infinite;
+            }
+        }
+
+        @media (min-width: 670px) {
+            .title {
+                font-size: 5rem;
+            }
+        }
+
+        article {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 時鐘本鐘------------------------------------------------------------------------------------------- */
         #clock {
-            /* background-color: #FAACA8; */
-            background-image: linear-gradient(45deg, #FAACA8 0%, #DDD6F3 80%);
-            border: solid 10px rgb(240, 240, 240);
-            box-shadow: gray 3px, 3px;
-            width: 300px;
-            height: 300px;
+            border: solid 3px rgb(251 251 251 / 59%);
+            width: 62vh;
+            height: 62vh;
             margin: auto;
-            position: relative;
+            position: absolute;
             border-radius: 50%;
-            /* 運算符號前後要有空格，因為時鐘是300px 分一半給上面一半給下面 */
-            top: calc(50vh - 150px);
+            top: 20vh;
+            left: 90vh;
+            box-shadow: 7px 9px 23px #474545;
         }
 
         #center {
-            background-color: #ffffff;
-            background-image: linear-gradient(45deg, #FAACA8 0%, #DDD6F3 80%);
+            background-color: #dfdedef5;
             width: 15px;
             height: 15px;
             margin: auto;
@@ -36,7 +94,7 @@
 
         #hour {
             width: 20%;
-            height: 10px;
+            height: 7px;
             background: rgb(255, 236, 253);
             position: absolute;
             top: calc(50% - 5px);
@@ -47,7 +105,7 @@
 
         #minute {
             width: 40%;
-            height: 10px;
+            height: 7px;
             background: rgb(255, 236, 253);
             position: absolute;
             top: calc(50% - 5px);
@@ -58,7 +116,7 @@
 
         #sec {
             width: 40%;
-            height: 6px;
+            height: 4px;
             background: rgb(250, 223, 248);
             position: absolute;
             top: calc(50% - 3px);
@@ -66,10 +124,40 @@
             border-radius: 5px;
             transform-origin: left center;
         }
+
+        #ymd {
+            font-size: 7vh;
+            color: rgb(189, 189, 189);
+            position: absolute;
+            top: 7%;
+            left: 47%;
+            font-family: 'Playfair Display', serif;
+            transform: translateX(-12%);
+            letter-spacing: 2px;
+            text-shadow: 6px 5px 4px #9a94946b;
+        }
+
+        #time {
+            font-size: 7vh;
+            color: rgb(189, 189, 189);
+            position: absolute;
+            top: 85%;
+            left: 49%;
+            font-family: 'Playfair Display', serif;
+            transform: translateX(-12%);
+            letter-spacing: 4px;
+            text-shadow: 6px 5px 4px #9a94946b;
+        }
     </style>
 </head>
 
 <body>
+    <article class="wrapper">
+    </article>
+
+    <div id="ymd"></div>
+    <div id="time"></div>
+
     <div id="clock">
         <div id="hour"></div>
         <div id="minute"></div>
@@ -80,15 +168,32 @@
         const hour = document.getElementById('hour')
         const minute = document.getElementById('minute')
         const sec = document.getElementById('sec')
+        const ymd = document.getElementById('ymd')
+        const time = document.getElementById('time')
 
         setInterval(() => {
             const date = new Date()
+            // year = date.getFullYear()
+
             //  CSS 裡 0度(12點) 是橫的，所以要補正 90
             hour.style.transform = `rotate(${date.getHours() * 30 - 90}deg)`
             minute.style.transform = `rotate(${date.getMinutes() * 6 - 90}deg)`
             sec.style.transform = `rotate(${date.getSeconds() * 6 - 90}deg)`
 
+            const h = new Date().getHours();
+            const m = new Date().getMinutes();
+            const s = new Date().getSeconds();
+            time.innerHTML = h + ":" + m + ":" + s;
+
         }, 1000);
+
+
+        const yy = new Date().getFullYear();
+        const mm = new Date().getMonth() + 1;
+        const dd = new Date().getDate();
+
+        ymd.innerHTML = yy + "/" + mm + "/" + dd;
+
     </script>
 
 </body>
